@@ -1,0 +1,62 @@
+﻿@page
+@using MagicItemShop.Web.DMPG.Models
+@using MagicItemShop.Web.Pages
+@using Newtonsoft.Json
+
+@model IndexModel
+
+@{
+    ViewData["Title"] = "Home page";
+
+    var RARITY_COLORS = new Dictionary<MagicItemRarity, string>
+    {
+        { MagicItemRarity.Common, "DarkSlateGray" },
+        { MagicItemRarity.Uncommon, "SteelBlue" },
+        { MagicItemRarity.Rare, "Gold" },
+        { MagicItemRarity.VeryRare, "DarkOrange" },
+        { MagicItemRarity.Legendary, "Magenta" },
+        { MagicItemRarity.Artifact, "MediumSeaGreen" },
+        { MagicItemRarity.Varies, "Teal" }
+    };
+}
+
+<div class="container-fluid">
+    @foreach (var shop in Model.MagicItemShops)
+    {
+        var itemsJsonList = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(JsonConvert.SerializeObject(shop.Inventory))!;
+
+        <h3>
+            @shop.Name
+        </h3>
+
+        <table class="table table-bordered">
+            <!-- Header Row -->
+            <tr>
+                @foreach (var property in itemsJsonList[0].Keys)
+                {
+                    <th>
+                        @property
+                    </th>
+                }
+            </tr>
+
+            <!-- Item Rows -->
+            @foreach (var item in itemsJsonList)
+            {
+                var shopItem = shop.Inventory.FirstOrDefault(x => x.Name == item["Name"]);
+                var keys = item.Keys.ToArray();
+
+                <tr>
+                    @for (var i = 0; i < keys.Length; i++)
+                    {
+                        var key = keys[i];
+
+                        <td class="@(i == 0 ? "fw-bold" : "")" style="color: @(i == 0 ? RARITY_COLORS[shopItem.Rarity] : "inherit")">
+                            @item[key]
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    }
+</div>

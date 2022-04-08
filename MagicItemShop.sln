@@ -1,0 +1,21 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicItemShop.Web", "MagicItemShop.Web\MagicItemShop.Web.csproj", "{1D0FE0A8-6428-4764-B39C-B4CCDFD55363}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Meta", "Meta", "{5222CEB8-8200-465F-A0AF-3FE3E72DD3AE}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1D0FE0A8-6428-4764-B39C-B4CCDFD55363}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D0FE0A8-6428-4764-B39C-B4CCDFD55363}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D0FE0A8-6428-4764-B39C-B4CCDFD55363}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D0FE0A8-6428-4764-B39C-B4CCDFD55363}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
