@@ -11,7 +11,7 @@ namespace MagicItemShop.Web.Extensions
 
         public static int PickBetween(int min, int max)
         {
-            return _random.Next(min, max);
+            return _random.Next(min, max + 1);
         }
 
         public static T PickRandom<T>(this IList<T> items)
@@ -21,9 +21,19 @@ namespace MagicItemShop.Web.Extensions
 
         public static IList<T> PickRandom<T>(this IList<T> items, int count)
         {
-            return new T[count]
-                .Select(_ => items[_random.Next(items.Count)])
-                .ToList();
+            var result = new List<T>();
+
+            while (result.Count < count)
+            {
+                var randomItem = items[_random.Next(items.Count)];
+
+                if (!result.Contains(randomItem))
+                {
+                    result.Add(randomItem);
+                }
+            }
+
+            return result;
         }
     }
 }
