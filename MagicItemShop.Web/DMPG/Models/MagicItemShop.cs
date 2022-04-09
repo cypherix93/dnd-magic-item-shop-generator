@@ -30,7 +30,10 @@ namespace MagicItemShop.Web.DMPG.Models
         }
 
         [JsonProperty(Order = -100)]
-        public string Name => _item.Item;
+        public string Name => _item.ItemName;
+
+        [JsonProperty(Order = -99)]
+        public string Url => _item.ItemUrl;
 
         [JsonProperty(Order = -90)]
         public MagicItemType? Type => _item.Type;
@@ -41,6 +44,10 @@ namespace MagicItemShop.Web.DMPG.Models
         [JsonProperty(Order = -70)]
         public bool RequiresAttunement => _item.Attunement?.Equals("Yes", StringComparison.OrdinalIgnoreCase) ?? false;
 
+        [JsonProperty(Order = -60)]
+        public SourceBook Source => _item.Source;
+
+        [JsonProperty(Order = 100)]
         public int Price
         {
             get

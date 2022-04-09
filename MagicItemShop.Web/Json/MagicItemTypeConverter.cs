@@ -1,24 +1,12 @@
 #nullable enable
 using MagicItemShop.Web.DMPG.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace MagicItemShop.Web.Json
 {
-    public class MagicItemTypeConverter : JsonConverter
+    public class MagicItemTypeConverter : StringEnumConverter
     {
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(string);
-        }
-
-        public override bool CanRead => true;
-        public override bool CanWrite => true;
-
-        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
-        {
-            writer.WriteValue(value?.ToString());
-        }
-
         public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null || reader.Value is null)
@@ -27,11 +15,6 @@ namespace MagicItemShop.Web.Json
             }
 
             var itemTypeString = (string)reader.Value;
-
-            if (Enum.TryParse<MagicItemType>(itemTypeString, ignoreCase: true, out var magicItemType))
-            {
-                return magicItemType;
-            }
 
             if (itemTypeString.Contains("Potion", StringComparison.OrdinalIgnoreCase))
             {
@@ -56,6 +39,14 @@ namespace MagicItemShop.Web.Json
             if (itemTypeString.Contains("Wondrou", StringComparison.OrdinalIgnoreCase))
             {
                 return MagicItemType.WondrousItem;
+            }
+
+            var matchingEnumName = Enum.GetNames<MagicItemType>()
+                .FirstOrDefault(x => itemTypeString.Contains(x));
+
+            if (matchingEnumName is not null && Enum.TryParse<MagicItemType>(matchingEnumName, out var magicItemType))
+            {
+                return magicItemType;
             }
 
             return null;

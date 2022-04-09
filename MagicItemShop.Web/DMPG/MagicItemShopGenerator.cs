@@ -8,6 +8,17 @@ namespace MagicItemShop.Web.DMPG
     {
         private static readonly ShopNamesData _shopNamesData;
 
+        private static readonly SortedSet<SourceBook> _availableSourceBooks = new()
+        {
+            SourceBook.DMG,
+            SourceBook.OA,
+            SourceBook.VGM,
+            SourceBook.XGE,
+            SourceBook.EBR,
+            SourceBook.WGE,
+            SourceBook.TCE
+        };
+
         private static readonly Dictionary<MagicItemRarity, decimal> _rarityQuantityMultiplier = new()
         {
             { MagicItemRarity.Common, 60 },
@@ -29,11 +40,12 @@ namespace MagicItemShop.Web.DMPG
             );
         }
 
-        public static async Task<Models.MagicItemShop> GenerateMagicItemShop()
+        public static Models.MagicItemShop GenerateMagicItemShop()
         {
-            var allItems = await ItemInventory.GetItemsFromDMPG();
+            var availableItems = MagicItemDatabase.Items
+                .Where(x => _availableSourceBooks.Contains(x.Source));
 
-            var groupedByRarity = allItems
+            var groupedByRarity = availableItems
                 .GroupBy(x => x.Rarity)
                 .ToDictionary(x => x.Key, x => x.ToList());
 
@@ -42,6 +54,8 @@ namespace MagicItemShop.Web.DMPG
                     groupedByRarity[x.Key].PickRandom(RandomHelper.PickBetween(x.Value.min, x.Value.max))
                 )
                 .Select(item => new MagicItemShopItem(item))
+                .OrderBy(item => item.Rarity)
+                .ThenBy(item => item.Name)
                 .ToList();
 
             return new(
