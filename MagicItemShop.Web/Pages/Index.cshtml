@@ -101,9 +101,21 @@
                         <td class="text-black-50">
                             @item.Source.ToEnumMemberName()
                         </td>
-                        <td>
-                            <img src="~/images/gold_coin_single.png" alt="Gold Piece" width="25" style="vertical-align: top">
-                            @item.Price gp
+                        <td style="white-space: nowrap">
+                            @if (item.Price > 0)
+                            {
+                                <img src="~/images/gold_coin_single.png" alt="Gold Piece" width="25" style="vertical-align: top">
+                                <text>
+                                    @item.Price gp
+                                </text>
+                            }
+                            else
+                            {
+                                <img src="~/images/rupee.svg" alt="Treasure" width="25" style="vertical-align: top">
+                                <text>
+                                    <span class="fw-bold" style="color: #FF7800">Priceless</span>
+                                </text>
+                            }
                         </td>
                     </tr>
                 }
