@@ -20,13 +20,13 @@
         color: #4a7094;
     }
     .rarity--Rare {
-        color: #ecc100;
+        color: #a88a03;
     }
     .rarity--VeryRare {
-        color: #e17203;
+        color: #ff8000;
     }
     .rarity--Legendary {
-        color: #e3003d;
+        color: #ff0045;
     }
     .rarity--Artifact {
         color: #009f9f;
@@ -46,6 +46,7 @@
     .magic-items-table th,
     .magic-items-table td {
         padding: 0.5rem 1rem;
+        vertical-align: middle;
     }
     
     .magic-items-table th.rarity,
@@ -62,7 +63,7 @@
     @foreach (var shop in Model.MagicItemShops)
     {
         <section class="mt-5">
-            <h1 class="h2 text-center">
+            <h1 class="font-heading text-center" style="color: #900">
                 @shop.Name
             </h1>
 
@@ -80,7 +81,7 @@
                 @foreach (var item in shop.Inventory)
                 {
                     <tr>
-                        <td class="rarity--@item.Rarity">
+                        <td class="rarity--@item.Rarity" style="font-size: 110%">
                             <a href="@item.Url" target="_blank" class="fw-bold" style="color: inherit">
                                 @item.Name
 
@@ -97,7 +98,7 @@
                                 <i>&mdash; requires attunement</i>
                             }
                         </td>
-                        <td>
+                        <td class="text-black-50">
                             @item.Source.ToEnumMemberName()
                         </td>
                         <td>
