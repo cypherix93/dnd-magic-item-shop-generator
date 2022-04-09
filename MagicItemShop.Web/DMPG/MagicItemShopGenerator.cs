@@ -21,10 +21,10 @@ namespace MagicItemShop.Web.DMPG
 
         private static readonly Dictionary<MagicItemRarity, decimal> _rarityQuantityMultiplier = new()
         {
-            { MagicItemRarity.Common, 60 },
+            { MagicItemRarity.Common, 48 },
             { MagicItemRarity.Uncommon, 24 },
-            { MagicItemRarity.Rare, 12 },
-            { MagicItemRarity.VeryRare, 4 },
+            { MagicItemRarity.Rare, 16 },
+            { MagicItemRarity.VeryRare, 8 },
             { MagicItemRarity.Legendary, 2 },
             { MagicItemRarity.Artifact, 1 },
             { MagicItemRarity.Varies, 8 }
@@ -43,8 +43,11 @@ namespace MagicItemShop.Web.DMPG
         public static Models.MagicItemShop GenerateMagicItemShop()
         {
             var availableItems = MagicItemDatabase.Items
-                .Where(x => _availableSourceBooks.Contains(x.Source))
-                .Where(x => x.Rarity != MagicItemRarity.Varies);
+                .Select(x => new MagicItemShopItem(x))
+                .Where(x => _availableSourceBooks.Contains(x.Source)) // filter to only available source books
+                .Where(x => x.Rarity != MagicItemRarity.Varies) // exclude varying rarity // TODO: need to include later
+                .Where(x => !(x.Rarity < MagicItemRarity.VeryRare && x.Price == 0)) // exclude all 0 price items below VeryRare
+                .ToList();
 
             var groupedByRarity = availableItems
                 .GroupBy(x => x.Rarity)
@@ -52,11 +55,11 @@ namespace MagicItemShop.Web.DMPG
 
             var inventory = groupedByRarity.Keys
                 .SelectMany(key =>
-                    groupedByRarity[key].PickRandom(
-                        RandomHelper.PickBetween(_rarityBaseQuantities[key].min, _rarityBaseQuantities[key].max)
-                    )
+                    groupedByRarity[key]
+                        .PickRandom(
+                            RandomHelper.PickBetween(_rarityBaseQuantities[key].min, _rarityBaseQuantities[key].max)
+                        )
                 )
-                .Select(item => new MagicItemShopItem(item))
                 .OrderBy(item => item.Rarity)
                 .ThenBy(item => item.Name)
                 .ToList();
