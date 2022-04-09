@@ -8,8 +8,6 @@ namespace MagicItemShop.Web.Pages
     {
         private readonly ILogger<IndexModel> _logger;
 
-        public IList<MagicItem> MagicItems { get; set; }
-
         public IList<DMPG.Models.MagicItemShop> MagicItemShops { get; set; }
 
         public IndexModel(ILogger<IndexModel> logger)
@@ -17,12 +15,11 @@ namespace MagicItemShop.Web.Pages
             _logger = logger;
         }
 
-        public async Task OnGet()
+        public void OnGet()
         {
-            MagicItemShops = await Task.WhenAll(
-                new DMPG.Models.MagicItemShop[10]
-                    .Select(_ => MagicItemShopGenerator.GenerateMagicItemShop())
-            );
+            MagicItemShops = new DMPG.Models.MagicItemShop[10]
+                .Select(_ => MagicItemShopGenerator.GenerateMagicItemShop())
+                .ToList();
         }
     }
 }
