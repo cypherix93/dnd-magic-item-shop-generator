@@ -43,15 +43,18 @@ namespace MagicItemShop.Web.DMPG
         public static Models.MagicItemShop GenerateMagicItemShop()
         {
             var availableItems = MagicItemDatabase.Items
-                .Where(x => _availableSourceBooks.Contains(x.Source));
+                .Where(x => _availableSourceBooks.Contains(x.Source))
+                .Where(x => x.Rarity != MagicItemRarity.Varies);
 
             var groupedByRarity = availableItems
                 .GroupBy(x => x.Rarity)
                 .ToDictionary(x => x.Key, x => x.ToList());
 
-            var inventory = _rarityBaseQuantities
-                .SelectMany(x =>
-                    groupedByRarity[x.Key].PickRandom(RandomHelper.PickBetween(x.Value.min, x.Value.max))
+            var inventory = groupedByRarity.Keys
+                .SelectMany(key =>
+                    groupedByRarity[key].PickRandom(
+                        RandomHelper.PickBetween(_rarityBaseQuantities[key].min, _rarityBaseQuantities[key].max)
+                    )
                 )
                 .Select(item => new MagicItemShopItem(item))
                 .OrderBy(item => item.Rarity)
