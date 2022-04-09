@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Apis.Sheets.v4" Version="1.57.0.2637" />
     <PackageReference Include="HtmlTableHelper" Version="1.2.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Serilog" Version="2.10.0" />
@@ -21,10 +20,6 @@
     <AdditionalFiles Include="Pages\Shared\_Layout.cshtml" />
     <AdditionalFiles Include="Pages\_ViewImports.cshtml" />
     <AdditionalFiles Include="Pages\_ViewStart.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot" />
   </ItemGroup>
 
 </Project>
