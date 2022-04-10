@@ -8,22 +8,34 @@ namespace MagicItemShop.Core.App.MagicItemShop.Models
 {
     public class MagicItemShop
     {
-        public string Name { get; set; }
+        private readonly IEnumerable<MagicItemShopItem> _items;
 
-        public List<MagicItemShopItem> Inventory { get; set; }
+        public string Name { get; }
 
-        public decimal Discount { get; set; } = 0m;
+        public decimal Discount { get; set; }
 
-        public MagicItemShop(string name, List<MagicItemShopItem> inventory)
+        public MagicItemShop(IEnumerable<MagicItemShopItem> items, string name)
         {
+            _items = items;
             Name = name;
-            Inventory = inventory;
         }
+
+        public List<MagicItemShopItem> Inventory => _items
+            .Select(item =>
+            {
+                item.AppliedDiscount = Discount;
+
+                return item;
+            })
+            .ToList();
     }
 
     public class MagicItemShopItem
     {
         private readonly MagicItem _item;
+
+        [JsonIgnore]
+        public decimal AppliedDiscount { get; set; }
 
         public MagicItemShopItem(MagicItem item)
         {
@@ -37,7 +49,7 @@ namespace MagicItemShop.Core.App.MagicItemShop.Models
         public string Url => _item.ItemUrl;
 
         [JsonProperty(Order = -90)]
-        public MagicItemType? Type => _item.Type;
+        public MagicItemType Type => _item.Type;
 
         [JsonProperty(Order = -80)]
         public MagicItemRarity Rarity => _item.Rarity;
@@ -53,16 +65,23 @@ namespace MagicItemShop.Core.App.MagicItemShop.Models
         {
             get
             {
-                int price;
-                if (int.TryParse(_item.SanePrice, out price) || int.TryParse(_item.DMPGPrice, out price))
-                {
-                    return price;
-                }
+                var basePrice = GetItemPrice();
 
-                var priceRangeSource = new[] { _item.DMGPrice, _item.XGEPrice }.PickRandom();
-
-                return PickPriceFromRange(priceRangeSource);
+                return (int)Math.Round(basePrice * (1m - AppliedDiscount));
             }
+        }
+
+        private int GetItemPrice()
+        {
+            int price;
+            if (int.TryParse(_item.SanePrice, out price) || int.TryParse(_item.DMPGPrice, out price))
+            {
+                return price;
+            }
+
+            var priceRangeSource = new[] { _item.DMGPrice, _item.XGEPrice }.PickRandom();
+
+            return PickPriceFromRange(priceRangeSource);
         }
 
         private static int PickPriceFromRange(string priceRange)

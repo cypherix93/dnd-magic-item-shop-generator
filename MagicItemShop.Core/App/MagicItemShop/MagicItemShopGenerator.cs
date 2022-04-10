@@ -7,37 +7,40 @@ namespace MagicItemShop.Core.App.MagicItemShop
 {
     public static class MagicItemShopGenerator
     {
-        private static readonly SortedSet<SourceBook> _availableSourceBooks = new()
+        public static IEnumerable<MagicItemShopItem> GetAvailableItems()
         {
-            SourceBook.DMG,
-            SourceBook.OA,
-            SourceBook.VGM,
-            SourceBook.XGE,
-            SourceBook.EBR,
-            SourceBook.WGE,
-            SourceBook.TCE
-        };
+            return MagicItemDatabase.Items
+                .Select(x => new MagicItemShopItem(x)); // filter to only available source books
+        }
 
-        private static readonly Dictionary<MagicItemRarity, decimal> _rarityQuantityMultiplier = new()
+        public static Models.MagicItemShop GenerateMagicItemShop(MagicItemShopGenerateRequest request = null)
         {
-            { MagicItemRarity.Common, 48 },
-            { MagicItemRarity.Uncommon, 24 },
-            { MagicItemRarity.Rare, 16 },
-            { MagicItemRarity.VeryRare, 8 },
-            { MagicItemRarity.Legendary, 2 },
-            { MagicItemRarity.Artifact, 1 },
-            { MagicItemRarity.Varies, 8 }
-        };
+            request ??= new();
 
-        private static readonly Dictionary<MagicItemRarity, (int min, int max)> _rarityBaseQuantities = _rarityQuantityMultiplier
-            .ToDictionary(x => x.Key, x => (min: (int)(x.Value / 2), max: (int)x.Value));
+            var filteredItems = GetAvailableItems();
 
-        public static Models.MagicItemShop GenerateMagicItemShop()
-        {
-            var availableItems = MagicItemDatabase.Items
-                .Select(x => new MagicItemShopItem(x))
-                .Where(x => _availableSourceBooks.Contains(x.Source)) // filter to only available source books
-                .Where(x => x.Rarity != MagicItemRarity.Varies) // exclude varying rarity // TODO: need to include later
+            // item sources filter
+            if (request.Sources.Any())
+            {
+                filteredItems = filteredItems
+                    .Where(x => request.Sources.Contains(x.Source));
+            }
+
+            // item rarities filter
+            if (request.Rarities.Any())
+            {
+                filteredItems = filteredItems
+                    .Where(x => request.Rarities.Contains(x.Rarity));
+            }
+
+            // item types filter
+            if (request.ItemTypes.Any())
+            {
+                filteredItems = filteredItems
+                    .Where(x => request.ItemTypes.Contains(x.Type));
+            }
+
+            var availableItems = filteredItems
                 .Where(x => !(x.Rarity < MagicItemRarity.VeryRare && x.Price == 0)) // exclude all 0 price items below VeryRare
                 .ToList();
 
@@ -45,21 +48,37 @@ namespace MagicItemShop.Core.App.MagicItemShop
                 .GroupBy(x => x.Rarity)
                 .ToDictionary(x => x.Key, x => x.ToList());
 
+            var rarityQuantityRanges = GetRarityQuantityRanges(request.RarityQuantityMultipliers);
+            var shopQuantityMultiplier = 1 + request.ShopItemsQuantityMultiplier;
+
             var inventory = groupedByRarity.Keys
                 .SelectMany(key =>
                     groupedByRarity[key]
                         .PickRandom(
-                            RandomHelper.PickBetween(_rarityBaseQuantities[key].min, _rarityBaseQuantities[key].max)
+                            (int)Math.Round(RandomHelper.PickBetween(rarityQuantityRanges[key].min, rarityQuantityRanges[key].max) * shopQuantityMultiplier)
                         )
                 )
                 .OrderBy(item => item.Rarity)
                 .ThenBy(item => item.Name)
                 .ToList();
 
-            return new(
-                MagicItemShopNames.GenerateShopName(),
-                inventory
+            var magicItemShop = new Models.MagicItemShop(
+                inventory, MagicItemShopNames.GenerateShopName()
             );
+
+            // calculate discounts
+            if (request.ShopDiscount != 0)
+            {
+                magicItemShop.Discount = request.ShopDiscount;
+            }
+
+            return magicItemShop;
+        }
+
+        private static Dictionary<MagicItemRarity, (int min, int max)> GetRarityQuantityRanges(MagicItemShopRarityQuantityMultipliers multipliers)
+        {
+            return multipliers
+                .ToDictionary(x => x.Key, x => (min: (int)(x.Value / 2), max: (int)x.Value));
         }
     }
 }

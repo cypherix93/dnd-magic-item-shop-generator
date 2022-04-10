@@ -22,7 +22,7 @@ namespace MagicItemShop.Core.App.Sources.DMPG.Models
         public SourceBook Source { get; set; }
         public string Page { get; set; }
 
-        public MagicItemType? Type { get; set; }
+        public MagicItemType Type { get; set; }
 
         public string Attunement { get; set; }
     }
