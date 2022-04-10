@@ -1,9 +1,9 @@
 using System.Runtime.Serialization;
-using MagicItemShop.Web.Json;
+using MagicItemShop.Core.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace MagicItemShop.Web.DMPG.Models
+namespace MagicItemShop.Core.App.Sources.DMPG.Models
 {
     public class MagicItem
     {

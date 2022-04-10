@@ -1,13 +1,12 @@
-using MagicItemShop.Web.DMPG.Models;
-using MagicItemShop.Web.Extensions;
-using Newtonsoft.Json;
+using MagicItemShop.Core.App.MagicItemShop.Models;
+using MagicItemShop.Core.App.Sources.DMPG;
+using MagicItemShop.Core.App.Sources.DMPG.Models;
+using MagicItemShop.Core.Extensions;
 
-namespace MagicItemShop.Web.DMPG
+namespace MagicItemShop.Core.App.MagicItemShop
 {
     public static class MagicItemShopGenerator
     {
-        private static readonly ShopNamesData _shopNamesData;
-
         private static readonly SortedSet<SourceBook> _availableSourceBooks = new()
         {
             SourceBook.DMG,
@@ -32,13 +31,6 @@ namespace MagicItemShop.Web.DMPG
 
         private static readonly Dictionary<MagicItemRarity, (int min, int max)> _rarityBaseQuantities = _rarityQuantityMultiplier
             .ToDictionary(x => x.Key, x => (min: (int)(x.Value / 2), max: (int)x.Value));
-
-        static MagicItemShopGenerator()
-        {
-            _shopNamesData = JsonConvert.DeserializeObject<ShopNamesData>(
-                File.ReadAllText("Resources/shopnames.json")
-            );
-        }
 
         public static Models.MagicItemShop GenerateMagicItemShop()
         {
@@ -65,29 +57,9 @@ namespace MagicItemShop.Web.DMPG
                 .ToList();
 
             return new(
-                GenerateShopName(),
+                MagicItemShopNames.GenerateShopName(),
                 inventory
             );
-        }
-
-        public static string GenerateShopName()
-        {
-            var shouldUseFullName = RandomHelper.RandomBool();
-            var shouldUseThe = RandomHelper.RandomBool();
-
-            if (shouldUseFullName)
-            {
-                return _shopNamesData.FullNames.PickRandom();
-            }
-
-            return $"{(shouldUseThe ? "The " : "")}{_shopNamesData.Prefixes.PickRandom()} {_shopNamesData.Suffixes.PickRandom()}";
-        }
-
-        public class ShopNamesData
-        {
-            public List<string> FullNames { get; set; }
-            public List<string> Prefixes { get; set; }
-            public List<string> Suffixes { get; set; }
         }
     }
 }

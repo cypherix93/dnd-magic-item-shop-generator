@@ -2,7 +2,7 @@
 using System.Data;
 using Newtonsoft.Json;
 
-namespace MagicItemShop.Web.Extensions
+namespace MagicItemShop.Core.Extensions
 {
     public static class DataTableExtensions
     {

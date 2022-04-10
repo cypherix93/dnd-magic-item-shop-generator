@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace MagicItemShop.Web.Extensions
+namespace MagicItemShop.Core.Extensions
 {
     public static class EnumExtensions
     {

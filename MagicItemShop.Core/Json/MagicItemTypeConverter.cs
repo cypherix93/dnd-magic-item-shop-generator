@@ -1,9 +1,9 @@
 #nullable enable
-using MagicItemShop.Web.DMPG.Models;
+using MagicItemShop.Core.App.Sources.DMPG.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace MagicItemShop.Web.Json
+namespace MagicItemShop.Core.Json
 {
     public class MagicItemTypeConverter : StringEnumConverter
     {

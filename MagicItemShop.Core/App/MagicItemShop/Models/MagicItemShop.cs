@@ -1,9 +1,10 @@
-using MagicItemShop.Web.Extensions;
+using MagicItemShop.Core.App.Sources.DMPG.Models;
+using MagicItemShop.Core.Extensions;
 using Newtonsoft.Json;
 
 #nullable enable
 
-namespace MagicItemShop.Web.DMPG.Models
+namespace MagicItemShop.Core.App.MagicItemShop.Models
 {
     public class MagicItemShop
     {

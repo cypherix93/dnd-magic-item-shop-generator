@@ -1,4 +1,4 @@
-namespace MagicItemShop.Web.Extensions
+namespace MagicItemShop.Core.Extensions
 {
     public static class RandomHelper
     {

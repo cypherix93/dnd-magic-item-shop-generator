@@ -1,5 +1,4 @@
-﻿using MagicItemShop.Web.DMPG;
-using MagicItemShop.Web.DMPG.Models;
+﻿using MagicItemShop.Core.App.MagicItemShop;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MagicItemShop.Web.Pages
@@ -8,7 +7,7 @@ namespace MagicItemShop.Web.Pages
     {
         private readonly ILogger<IndexModel> _logger;
 
-        public IList<DMPG.Models.MagicItemShop> MagicItemShops { get; set; }
+        public IList<Core.App.MagicItemShop.Models.MagicItemShop> MagicItemShops { get; set; }
 
         public IndexModel(ILogger<IndexModel> logger)
         {
@@ -17,7 +16,7 @@ namespace MagicItemShop.Web.Pages
 
         public void OnGet()
         {
-            MagicItemShops = new DMPG.Models.MagicItemShop[10]
+            MagicItemShops = new Core.App.MagicItemShop.Models.MagicItemShop[10]
                 .Select(_ => MagicItemShopGenerator.GenerateMagicItemShop())
                 .ToList();
         }
