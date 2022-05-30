@@ -1,0 +1,27 @@
+﻿@page "/"
+@using MagicItemShop.Core.App.MagicItemShop.Models
+@using MagicItemShop.Core.App.MagicItemShop
+@using MagicItemShop.Core.App.MagicItemShop.Api
+
+@code {
+    private MagicShop MagicShop { get; set; }
+
+    private MagicItemShopGenerateRequest MagicItemShopGenerateRequest { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        GenerateMagicItemShop();
+    }
+
+    private void GenerateMagicItemShop()
+    {
+        MagicShop = MagicItemShopGenerator.GenerateMagicItemShop(MagicItemShopGenerateRequest);
+    }
+
+}
+
+<div class="container">
+    <section class="mt-5">
+        <MagicItemShopTable MagicShop="MagicShop"></MagicItemShopTable>
+    </section>
+</div>

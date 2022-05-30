@@ -1,6 +1,6 @@
-using MagicItemShop.Core.App.Sources.DMPG.Models;
+using MagicItemShop.Core.App.MagicItemShop.Models.Common;
 
-namespace MagicItemShop.Core.App.MagicItemShop.Models
+namespace MagicItemShop.Core.App.MagicItemShop.Api
 {
     public class MagicItemShopGenerateRequest
     {

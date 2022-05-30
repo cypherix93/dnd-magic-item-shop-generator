@@ -1,0 +1,21 @@
+@using MagicItemShop.Core.Extensions
+@using MagicItemShop.Core.App.MagicItemShop.Api
+@using MagicItemShop.Core.App.MagicItemShop.Models.Common
+
+@code {
+#nullable enable
+
+    [Parameter]
+    public MagicItemShopGenerateRequest? Request { get; set; }
+
+    private MagicItemShopGenerateRequest CurrentRequest { get; set; } = null!;
+
+    private Dictionary<MagicItemRarity, bool> RaritySelections { get; set; } = new();
+    private Dictionary<SourceBook, bool> SourceBookSelections { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        CurrentRequest = Request?.JsonClone() ?? new();
+    }
+
+}

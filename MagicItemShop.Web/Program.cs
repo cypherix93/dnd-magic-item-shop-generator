@@ -22,12 +22,15 @@ builder.Host
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
 
 var app = builder.Build();
 
 app.UseStaticFiles();
 
 app.UseRouting();
-app.MapRazorPages();
+
+app.MapBlazorHub();
+app.MapFallbackToPage("/_Host");
 
 app.Run();

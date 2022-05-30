@@ -14,13 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include="Pages\Index.cshtml" />
-    <AdditionalFiles Include="Pages\Shared\_Layout.cshtml" />
-    <AdditionalFiles Include="Pages\_ViewImports.cshtml" />
-    <AdditionalFiles Include="Pages\_ViewStart.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MagicItemShop.Core\MagicItemShop.Core.csproj" />
   </ItemGroup>
 

@@ -1,72 +1,9 @@
 using System.Runtime.Serialization;
-using MagicItemShop.Core.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace MagicItemShop.Core.App.Sources.DMPG.Models
+namespace MagicItemShop.Core.App.MagicItemShop.Models.Common
 {
-    public class MagicItem
-    {
-        [JsonProperty("Item")]
-        public string ItemName { get; set; }
-
-        public string ItemUrl { get; set; }
-
-        public string SanePrice { get; set; }
-        public string DMPGPrice { get; set; }
-        public string MBJVPrice { get; set; }
-        public string DMGPrice { get; set; }
-        public string XGEPrice { get; set; }
-
-        public MagicItemRarity Rarity { get; set; }
-        public SourceBook Source { get; set; }
-        public string Page { get; set; }
-
-        public MagicItemType Type { get; set; }
-
-        public string Attunement { get; set; }
-    }
-
-    [JsonConverter(typeof(MagicItemTypeConverter))]
-    public enum MagicItemType
-    {
-        Ammunition,
-        Armor,
-
-        [EnumMember(Value = "Potion / Oil")]
-        PotionOil,
-        Ring,
-        Rod,
-        Shield,
-
-        [EnumMember(Value = "Spell Gem")]
-        SpellGem,
-
-        [EnumMember(Value = "Spell Scroll")]
-        SpellScroll,
-
-        Staff,
-        Wand,
-        Weapon,
-
-        [EnumMember(Value = "Wondrous Item")]
-        WondrousItem
-    }
-
-    [JsonConverter(typeof(StringEnumConverter))]
-    public enum MagicItemRarity
-    {
-        Common,
-        Uncommon,
-        Rare,
-
-        [EnumMember(Value = "Very Rare")]
-        VeryRare,
-        Legendary,
-        Artifact,
-        Varies
-    }
-
     [JsonConverter(typeof(StringEnumConverter))]
     public enum SourceBook
     {

@@ -1,4 +1,5 @@
 #nullable enable
+using MagicItemShop.Core.App.MagicItemShop.Models.Common;
 using MagicItemShop.Core.App.Sources.DMPG.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;

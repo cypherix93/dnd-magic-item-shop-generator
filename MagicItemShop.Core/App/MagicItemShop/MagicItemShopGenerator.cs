@@ -1,4 +1,6 @@
+using MagicItemShop.Core.App.MagicItemShop.Api;
 using MagicItemShop.Core.App.MagicItemShop.Models;
+using MagicItemShop.Core.App.MagicItemShop.Models.Common;
 using MagicItemShop.Core.App.Sources.DMPG;
 using MagicItemShop.Core.App.Sources.DMPG.Models;
 using MagicItemShop.Core.Extensions;
@@ -7,13 +9,13 @@ namespace MagicItemShop.Core.App.MagicItemShop
 {
     public static class MagicItemShopGenerator
     {
-        public static IEnumerable<MagicItemShopItem> GetAvailableItems()
+        public static IEnumerable<MagicItem> GetAvailableItems()
         {
             return MagicItemDatabase.Items
-                .Select(x => new MagicItemShopItem(x)); // filter to only available source books
+                .Select(x => new MagicItem(x)); // filter to only available source books
         }
 
-        public static Models.MagicItemShop GenerateMagicItemShop(MagicItemShopGenerateRequest request = null)
+        public static Models.MagicShop GenerateMagicItemShop(MagicItemShopGenerateRequest request = null)
         {
             request ??= new();
 
@@ -62,7 +64,7 @@ namespace MagicItemShop.Core.App.MagicItemShop
                 .ThenBy(item => item.Name)
                 .ToList();
 
-            var magicItemShop = new Models.MagicItemShop(
+            var magicItemShop = new Models.MagicShop(
                 inventory, MagicItemShopNames.GenerateShopName()
             );
 
